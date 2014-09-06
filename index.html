@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NomadMap by @pbechu - Using data of NomadList by @levelsio</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.0/leaflet.awesome-markers.css" />
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.0/leaflet.awesome-markers.min.js"></script>
+
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+    html, body, #map {
+      height: 100%;
+    }
+    .city-name {
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    var map = L.map('map').setView([45.764043, 4.835659], 3);
+
+    var blueMarker = L.AwesomeMarkers.icon({
+      prefix: 'fa',
+      icon: 'circle-o',
+      markerColor: 'blue'
+    });
+
+    var starMarker = L.AwesomeMarkers.icon({
+      prefix: 'fa',
+      icon: 'star',
+      markerColor: 'green'
+    });
+
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>, ' +
+        'Imagery &copy; <a href="http://mapbox.com" target="_blank">Mapbox</a>' + 
+        ' | Powered by &copy; <a href="http://nomadlist.io" target="_blank">NomadList</a>',
+      id: 'examples.map-i86knfo3'
+    }).addTo(map);
+
+    data = $.getJSON("data.json", function(json) {
+      console.log(
+        'That is what @levelsio said about the usage of the NomadList API: "' +
+        json.thanks + '"'
+      );
+
+      $.each(json.cities, function(index, city) {
+        L.marker([city.gps.lat, city.gps.lng], {icon: city.position <= 20 ? starMarker : blueMarker, riseOnHover: true}).bindPopup(
+          "<a class='city-name' href='http://nomadlist.io/"+ city.slug +"' target='_blank'>" + 
+              city.name + "<br/>" +
+              "<img width='100%' src='" + city.image["100px"] + "'/>" +
+          "</a>"
+        ).addTo(map);
+      });
+    });
+
+
+
+  </script>
+</body>
+</html>
