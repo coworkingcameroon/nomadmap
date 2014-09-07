@@ -63,7 +63,7 @@
 
       $.each(json.cities, function(index, city) {
         L.marker([city.gps.lat, city.gps.lng], {icon: city.position <= 20 ? starMarker : blueMarker, riseOnHover: true}).bindPopup(
-          "<a class='city-name' href='http://nomadlist.io/"+ city.slug +"' target='_blank'>" + 
+          "<a class='city-name' href='http://nomadlist.io/"+ city.slug +"?utm_source=nomadmap&utm_medium=web&utm_term=" + city.slug + "&utm_content=popuplink&utm_campaign=referal' target='_blank'>" + 
               city.name + "<br/>" +
               "<img width='100%' src='" + city.image["100px"] + "'/>" +
           "</a>"
